@@ -1,11 +1,15 @@
-# [Título del trabajo]
+# [Vehículo autónomo]
 
-[Descripción breve del proyecto a realizar (2-3 frases).]
+[Se llevará acabo el proyecto de un vehículo automatizado capaz de moverse esquivando posibles obstáculos por sí mismo]
 
 ## Integrantes del equipo
 
-[Nombres, apellidos, y usuario GitHub de los integrantes del equipo.]
+[Omar Ftouh: @OmarFL, 
+ Eugenio Fernández: @Eugenio-Fernandez,
+ David Gallego: @Gallego1502,
+ Juan Pablo De Miguel @:,
+ Iván Guerrero: @,]
 
 ## Objetivos del trabajo
 
-[Lista de los objetivos que se persiguen con el trabajo propuesto.]
+[Ser capaces de desarrollar un sistema automatizado y programado para que realice ciertas funciones o tareas]
