@@ -24,4 +24,5 @@ Iván Guerrero: @ivanguerrero2002
 
 1. Ser capaces de desarrollar un sistema automatizado y programado para que realice ciertas funciones o tareas
 
-2. Controlar cuando el vehículo acelerará o se detendrá a través de un control remoto vía bluetooth]
+2. Controlar cuando el vehículo acelerará o se detendrá a través de un control remoto vía bluetooth
+]
