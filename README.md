@@ -7,8 +7,8 @@
 [Omar Ftouh: @OmarFL, 
  Eugenio Fernández: @Eugenio-Fernandez,
  David Gallego: @Gallego1502,
- Juan Pablo De Miguel @:,
- Iván Guerrero: @,]
+ Juan Pablo De Miguel: @,
+ Iván Guerrero: @ivanguerrero2002]
 
 ## Objetivos del trabajo
 
