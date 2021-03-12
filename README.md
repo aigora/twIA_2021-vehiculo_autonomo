@@ -7,9 +7,11 @@
 [Omar Ftouh: @OmarFL, 
  Eugenio Fernández: @Eugenio-Fernandez,
  David Gallego: @Gallego1502,
- Juan Pablo De Miguel: @,
+ Juan Pablo De Miguel: @juanpablodemiguel,
  Iván Guerrero: @ivanguerrero2002]
 
 ## Objetivos del trabajo
 
-[Ser capaces de desarrollar un sistema automatizado y programado para que realice ciertas funciones o tareas]
+[1. Ser capaces de desarrollar un sistema automatizado y programado para que realice ciertas funciones o tareas
+
+2. Controlar cuando el vehículo acelerará o se detendrá a través de un control remoto vía bluetooth]
