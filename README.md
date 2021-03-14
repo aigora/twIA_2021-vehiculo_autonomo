@@ -5,15 +5,15 @@ Se llevará a cabo el proyecto de un vehículo automatizado capaz de moverse esq
 ## Integrantes del equipo
 
 
-1. Omar Ftouh: [@OmarFL] (https://github.com/OmarFL)
+1. Omar Ftouh: [@OmarFL](https://github.com/OmarFL)
 
-2. Eugenio Fernández: [@Eugenio-Fernandez] (https://github.com/Eugenio-Fernandez)
+2. Eugenio Fernández: [@Eugenio-Fernandez](https://github.com/Eugenio-Fernandez)
 
-3. David Gallego: [@Gallego1502] (https://github.com/Gallego1502)
+3. David Gallego: [@Gallego1502](https://github.com/Gallego1502)
 
-4. Juan Pablo De Miguel: [@juanpablodemiguel] (https://github.com/juanpablodemiguel)
+4. Juan Pablo De Miguel: [@juanpablodemiguel](https://github.com/juanpablodemiguel)
 
-5. Iván Guerrero: [@ivanguerrero2002] (https://github.com/ivanguerrero2002)
+5. Iván Guerrero: [@ivanguerrero2002](https://github.com/ivanguerrero2002)
 
 
 ## Objetivos del trabajo
