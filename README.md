@@ -1,6 +1,6 @@
-# Vehículo autónomo
+# Vehículo autónomo 
 
-Se llevará a cabo el proyecto de un vehículo automatizado capaz de moverse esquivando posibles obstáculos por sí mismo, empleando la plataforma "Arduino".
+Se llevará a cabo el proyecto de un vehículo automatizado capaz de detectar posibles obstáculos por sí mismo, y cuyo movimiento se controlará por Bluetooth. Se empleará la plataforma "Arduino".
 
 ## Integrantes del equipo
 
