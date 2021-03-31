@@ -1,6 +1,6 @@
 # Vehículo autónomo 
 
-Se llevará a cabo el proyecto de un vehículo automatizado capaz de detectar posibles obstáculos por sí mismo, y cuyo movimiento se controlará por Bluetooth. Se empleará la plataforma "Arduino".
+Se llevará a cabo el proyecto de un vehículo automatizado cuyo funcionamiento será similar al de un camión de bomberos. Además, será capaz de detectar posibles obstáculos por sí mismo y su movimiento se controlará por Bluetooth. Se empleará la plataforma "Arduino".
 
 ## Integrantes del equipo
 
