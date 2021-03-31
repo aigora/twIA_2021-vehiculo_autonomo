@@ -20,5 +20,5 @@ Se llevará a cabo el proyecto de un vehículo automatizado capaz de detectar po
 
 
 - Ser capaces de desarrollar un sistema automatizado y programado para que realice ciertas funciones o tareas
-- Controlar cuando el vehículo acelerará o se detendrá a través de un control remoto vía bluetooth
+- Controlar cuándo el vehículo acelerará o se detendrá, así como su dirección, a través de un control remoto vía bluetooth
 
