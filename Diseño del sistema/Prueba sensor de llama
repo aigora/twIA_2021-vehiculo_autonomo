@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main()
+{
+    int si, i=0, n=1000000, llama;
+
+    printf("Arranca el coche y empieza a moverse");
+    
+    do{
+        
+        printf("\n¿El sensor detecta una llama? 1 si la detecta y 0 si no la detecta: ");
+        scanf("%d", &llama);
+        if(llama==1)
+        {
+         printf("Los actuadores se ponen en marcha");
+         } else
+         if(llama==0)
+         {
+             printf("Vuelta al punto de partida");
+         }else
+         printf("No es posible");
+          
+          i++;
+  
+    }while(i<n);
+}
