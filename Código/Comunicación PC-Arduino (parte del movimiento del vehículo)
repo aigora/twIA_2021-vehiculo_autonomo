@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <Windows.h>
+#include "SerialClass.h"
+
+
+void Send_to_hw(Serial* Arduino, char* estado);		 // Prototipo de la función que permitirá enviar datos a Arduino
+
+int main() {
+
+	Serial* Arduino;
+
+	char puerto[] = "COM3";						 // Puerto serie al que está conectado Arduino en este caso
+	char estado;
+
+
+
+	Arduino = new Serial((char*)puerto);		     // Se inicia la conexión con Arduino
+
+	while (Arduino->IsConnected()) {
+
+		printf("Introduce la instruccion deseada: %c\n");		 // El usuario interaccionará con Arduino desde el teclado
+		scanf_s("%c", &estado);
+		getchar();
+
+		Send_to_hw;
+
+		if (estado != 'a'|| 'b'|| 'c'|| 'd'|| 'e'|| 'f') {		 // La dirección del vehículo se controla mediante los 6 primeros caracteres del alfabeto
+			printf("Error: Instruccion no definida");
+		}
+
+		if (estado == 'c')									 // El vehículo se detiene 
+
+			break;
+	
+	}
+}
+
+void Send_to_hw(Serial* Arduino, char* estado)
+{
+	Arduino->WriteData(estado, strlen(estado));
+}
