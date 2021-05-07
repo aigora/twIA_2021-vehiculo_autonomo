@@ -1,0 +1,185 @@
+//librerías
+//
+#include <Servo.h>
+//
+int giro_izqda = 4095;    //ya que 4096 es el número de pasos totales por vuelta; siendo este el tope máximo para evitar retorcer las conexiones de los otros módulos
+boolean direcc = true; 
+int pasos = 0;            // Define el paso actual de la secuencia
+//
+Servo servoMotor; //  variable de control del servo
+
+
+void setup() {
+
+  // definición de pines 
+  //
+  // motor paso a paso
+  #define IN1  4
+  #define IN2  5
+  #define IN3  6
+  #define IN4  7
+  //
+  // Servomotor
+  #define servo 9
+  //
+  //bomba de agua
+  #define bomb 8 
+  
+  Serial.begin(9600);  
+  // declaración de las salidas asignadas a la placa arduino
+  //
+  // motor paso a paso
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  //
+  // Servomotor
+  servoMotor.attach(servo);
+  servoMotor.write(0); // Inicializamos al ángulo 0 el servomotor
+  //
+  //bomba de agua
+  pinMode(bomb,OUTPUT) ; 
+
+  
+}
+
+
+void loop() {
+
+  // variables dirección por teclado
+  //
+  char leer1; // variable para almacenamiento de caracteres (motor paso a paso)
+  boolean encendido1 = true; // variable de almacenamiento de estado binario  (motor paso a paso)
+  char leer2; // (servo)
+  boolean encendido2 = true; // (servo)
+  char leer3; // (bomba agua)
+  boolean encendido3 = true; // (bomba agua)
+
+  leer1 = Serial.read(); //almacena la lectura del puerto serial en la variable "leer1" que es de tipo caracter(motor paso a paso)
+  leer2 = Serial.read(); //(servomotor)
+
+  // --> giro a la izquierda motor paso a paso
+  
+  if ((leer1 == 'i')&&(encendido1 == false)) { //si en la variable leer aparece la letra "i"; y si el motor no está encendido hacer lo siguiente:
+
+    encendido1 = true; // asigna el valor 1 a la variable encendido, que da seguimiento al estado booleano del motor
+
+    while (giro_izqda > 0) { //bucle encargado de la rotación
+      
+      giro() ;     // Avanza un paso
+      giro_izqda-- ;  // Un paso menos
+      delay (1) ;
+    }   
+    
+  }  else if ((leer1 == 'i')&&(encendido1 == true)) {
+    
+    encendido1 = false; // asigna el valor 0 a la variable encendido, que da seguimiento al estado booleano del motor
+  }
+
+  // --> giro a la derecha motor paso a paso
+
+  
+  if ((leer1 == 'd')&&(encendido1 == false)) { //si en la variable leer aparece la letra "d"; y si el motor no está encendido hacer lo siguiente:
+
+    direcc = ! direcc; // Invertimos la direceccion de giro
+    giro_izqda = 4095; //se restablece la variable para el giro en dirección contraria
+
+    encendido1 = true; // asigna el valor 1 a la variable encendido, que da seguimiento al estado booleano del motor
+
+    while (giro_izqda > 0) { //bucle encargado de la rotación
+      
+      giro() ;     // Avanza un paso
+      giro_izqda-- ;  // Un paso menos
+      delay (1) ;
+    }   
+    
+  }  else if ((leer1 == 'd')&&(encendido1 == true)) {
+    
+    encendido1 = false; // asigna el valor 0 a la variable encendido, que da seguimiento al estado booleano del motor
+    direcc = ! direcc; //se restablece de nuevo la dirección de giro
+    }
+  //
+  //rotación servomotor
+  //
+  //subir escalera
+  if ((leer2 == 's')&&(encendido2 == false)) { //si en la variable leer aparece la letra "s"; y si el motor no está encendido hacer lo siguiente:
+
+    encendido2 = true; // asigna el valor 1 a la variable encendido, que da seguimiento al estado booleano del motor
+
+    for (int i = 0; i <= 180; i++) {
+      
+      servoMotor.write(i); // Desplazamos al ángulo correspondiente
+      delay(100);
+    }       
+  }  else if ((leer1 == 's')&&(encendido1 == true)) {
+    
+    encendido1 = false; // asigna el valor 0 a la variable encendido, que da seguimiento al estado booleano del motor
+  }
+  //
+  //bajar
+  //
+  if ((leer2 == 'b')&&(encendido2 == false)) { //si en la variable leer aparece la letra "b"; y si el motor no está encendido hacer lo siguiente:
+
+    encendido2 = true; // asigna el valor 1 a la variable encendido, que da seguimiento al estado booleano del motor
+
+    for (int i = 179; i > 0; i--) {
+      
+      servoMotor.write(i); // Desplazamos al ángulo correspondiente
+      delay(100);
+    }       
+  }  else if ((leer1 == 'b')&&(encendido1 == true)) {
+    
+    encendido1 = false; // asigna el valor 0 a la variable encendido, que da seguimiento al estado booleano del motor
+  }
+  //
+  //bomba de agua
+  //
+  if ((leer3 == 'e')&&(encendido3 == false)) { //si en la variable leer aparece la letra "e"; y si el motor no está encendido hacer lo siguiente:
+
+    encendido3 = true; // asigna el valor 1 a la variable encendido, que da seguimiento al estado booleano del motor
+
+    digitalWrite(bomb,HIGH) ;
+    
+  }  else if ((leer3 == 'e')&&(encendido3 == true)) {
+    
+    encendido3 = false; // asigna el valor 0 a la variable encendido, que da seguimiento al estado booleano del motor
+  }
+}
+
+
+//funciones
+
+void giro()   {   //función del giro del motor paso a paso 
+
+  //definición de matriz para un giro mediante medios pulsos
+  int pulso [ 8 ][ 4 ] = { 
+    
+    {1, 0, 0, 0},
+    {1, 1, 0, 0},
+    {0, 1, 0, 0},
+    {0, 1, 1, 0},
+    {0, 0, 1, 0},
+    {0, 0, 1, 1},
+    {0, 0, 0, 1},
+    {1, 0, 0, 1}
+    
+    };
+
+  digitalWrite( IN1, pulso[pasos][ 0] );
+  digitalWrite( IN2, pulso[pasos][ 1] );
+  digitalWrite( IN3, pulso[pasos][ 2] );
+  digitalWrite( IN4, pulso[pasos][ 3] );
+
+  situardirecc();
+}
+
+void situardirecc() // sunción encargada de ajustar la dirección del motor paso a paso
+{
+  if (direcc)
+    pasos++;
+  else
+    pasos--;
+
+  pasos = ( pasos + 8 ) % 8 ;//por tratarse en este caso de un movimiento de medios pasos
+}
