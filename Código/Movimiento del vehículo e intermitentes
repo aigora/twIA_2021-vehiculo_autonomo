@@ -1,4 +1,4 @@
-#include <Servo.h>                // Se incluye la libreria Servo
+#include <Servo.h>                // Se incluye la librería Servo
 
 
 Servo servo1;                    // Se crea el objeto servo1 
