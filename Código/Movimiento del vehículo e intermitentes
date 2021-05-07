@@ -1,1 +1,181 @@
+#include <Servo.h>                // Se incluye la libreria Servo
 
+
+Servo servo1;                    // Se crea el objeto servo1 
+  
+
+void setup()  { 
+
+  
+  int izqA = 5;              // Se definen las variables correspondientes a la dirección del vehículo
+  int izqB = 6; 
+  int derA = 9; 
+  int derB = 10; 
+  
+  int echo = 2;            // Se reservan los pines 2 y 3 para el sensor ultrasonido
+  int trigger = 3; 
+
+  int ledderecha, ledizquierda;
+  
+
+
+  Serial.begin(9600);    // Inicia el puerto serial para llevar a cabo la comunicación vía Bluetooth
+
+
+  // CÓDIGO ASOCIADO AL MOVIMIENTO DEL VEHÍCULO
+  
+  pinMode(derA, OUTPUT);
+  pinMode(derB, OUTPUT);
+  pinMode(izqA, OUTPUT);
+  pinMode(izqB, OUTPUT);
+  
+  pinMode(echo, INPUT);      // Se establece el pin 2 como entrada (echo) 
+  pinMode(trigger,OUTPUT);   // Se establece el pin 3 como salida (trigger)
+  pinMode(13,OUTPUT);
+
+  servo1.attach(11,660,1400);    // Se asocia el servo1 al pin 11, y se definen el mínimo y el máximo del ancho del pulso 
+
+
+// CÓDIGO CORRESPONDIENTE A LOS INTERMITENTES
+
+   pinMode(ledderecha, OUTPUT);    // Se definen los pines como salidas
+   pinMode(ledizquierda, OUTPUT);    
+
+                                
+} 
+
+
+
+
+
+
+void loop()
+{
+
+  int izqA = 5;              // Se definen las variables correspondientes a la dirección del vehículo
+  int izqB = 6; 
+  int derA = 9; 
+  int derB = 10; 
+  int vel = 255;             // Hace referencia a la velocidad que tendrán los motores (0-255)
+  char estado = 'g';         // Estado incial del vehículo (en reposo)
+
+  int echo = 2;            // Se reservan los pines 2 y 3 para el sensor ultrasonido
+  int trigger = 3;         
+  int duracion, distancia; 
+
+
+  
+// CÓDIGO ASOCIADO AL MOVIMIENTO DEL VEHÍCULO
+
+
+  if (Serial.available()>0)        // Intervienen el módulo Bluetooth y el puerto Serial
+ {
+      estado = Serial.read();
+ }
+      switch (estado) {
+      case 'a':   // Se desplazará hacia delante
+            analogWrite(derB, 0);     
+            analogWrite(izqB, 0); 
+            analogWrite(derA, vel);  
+            analogWrite(izqA, vel);       
+              break;
+      case 'b': // Se desplazará a la izquierda
+            analogWrite(derB, 0);
+            analogWrite(izqB, 0);
+            analogWrite(derA, 0);
+            analogWrite(izqA, vel);
+              break;
+      case 'c':   // Se detendrá el vehículo
+            analogWrite(derB, 0);     
+            analogWrite(izqB, 0); 
+            analogWrite(derA, 0);    
+            analogWrite(izqA, 0); 
+              break;
+      case 'd': // Se desplazará hacia la derecha
+            analogWrite(derB, 0);     
+            analogWrite(izqB, 0);
+            analogWrite(izqA, 0);
+            analogWrite(derA, vel);  
+              break;
+      case 'e':   // Se desplazará hacia atrás
+            analogWrite(derA, 0);    
+            analogWrite(izqA, 0);
+            analogWrite(derB, vel);  
+            analogWrite(izqB, vel);      
+              break;
+      case 'f':  // El vehículo avanzará de manera automática
+            digitalWrite(trigger, HIGH);   // Se envía por el trigger un pulso de 1 milisegundo
+            delay(1);
+            digitalWrite(trigger, LOW);
+     
+            duracion = pulseIn(echo, HIGH);              // Se obtiene el tiempo del Echo
+            distancia = (duracion/2) / 29;              // Se calcula la distancia (en cm)
+            delay(10); 
+
+             
+            if (distancia <= 15 && distancia >=2){     // Se establece la condición: si la distancia es menor de 15 cm y mayor que 2 cm:
+                
+                analogWrite(derB, 0);                  // Se detendrán los motores durante 200 milisegundos
+                analogWrite(izqB, 0); 
+                analogWrite(derA, 0);    
+                analogWrite(izqA, 0); 
+                delay (200);
+                
+                analogWrite(derB, vel);               // El vehículo retrocederá durante 1 segundo
+                analogWrite(izqB, vel); 
+                delay(1000);           
+                
+                analogWrite(derB, 0);                // El vehículo girará hacia un lado durante 800 milisegundos (en este caso hacia la izquierda)   
+                analogWrite(izqB, 0); 
+                analogWrite(derA, 0);  
+                analogWrite(izqA, vel);  
+                delay(800);
+                
+                digitalWrite(13,LOW);
+            }
+
+            else{                                   // En caso de no detectar obstáculos, el vehículo continuará su marcha 
+                 analogWrite(derB, 0);     
+                 analogWrite(izqB, 0); 
+                 analogWrite(derA, vel);  
+                 analogWrite(izqA, vel); 
+            }
+              break;
+
+
+      case 'g':   // Los motores se apagarán
+          analogWrite(derB, 0);     
+          analogWrite(izqB, 0); 
+          analogWrite(derA, 0);    
+          analogWrite(izqA, 0);
+              break;
+      }
+
+
+// CÓDIGO CORRESPONDIENTE A LOS INTERMITENTES
+
+
+// Se colocarán dos leds que actuarán como intermitentes del vehículo
+
+
+  if(estado=='c'){                    // El estado 'c' corresponde al movimiento hacia la derecha del vehículo
+  
+   int ledderecha = 13;              // En este caso el led de la derecha se ha colocado en el pin 13
+   
+   digitalWrite(ledderecha, HIGH);   
+   delay(100);                       // Se le atribuye al intermitente el valor de 100 milisegundos
+   digitalWrite(ledderecha, LOW);
+   delay(100);
+ }
+
+ if(estado=='e'){                     // El estado 'e' corresponde al movimiento hacia la izquierda del vehículo
+  
+   int ledizquierda = 12;             // En este caso el led de la izquierda se ha colocado en el pin 12
+   
+   digitalWrite(ledizquierda, HIGH);   
+   delay(100);                         // Se le atribuye al intermitente el valor de 100 milisegundos
+   digitalWrite(ledizquierda, LOW);
+   delay(100);
+ }
+
+  }
