@@ -143,13 +143,6 @@ void loop()
               break;
 
 
-      case 'g':   // Los motores se apagarán
-          analogWrite(derB, 0);     
-          analogWrite(izqB, 0); 
-          analogWrite(derA, 0);    
-          analogWrite(izqA, 0);
-              break;
-      }
 
 
 // CÓDIGO CORRESPONDIENTE A LOS INTERMITENTES
