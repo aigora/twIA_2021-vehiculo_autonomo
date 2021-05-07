@@ -1,0 +1,46 @@
+int led = 13; // LED pin
+int digitalPin = 2; // KY-026 entrada digital
+int analogPin = A0; // KY-026 entrada análoga
+int digitalVal; // lectura digital
+int analogVal; // lectura análoga
+int zumbador = 9; // buzzer pin
+
+void setup()
+{
+  // Se indica la funcion de cada pin
+  pinMode(led, OUTPUT);
+  pinMode(zumbador, OUTPUT);
+  pinMode(digitalPin, INPUT);
+  //pinMode(analogPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  // lectura entrada digital
+  digitalVal = digitalRead(digitalPin);
+  if (digitalVal == HIGH) // si la longitud de onda de la llama es detectada el comienza el bucle
+  {
+    digitalWrite(led, HIGH); // enciende el LED
+    delay(50);
+    digitalWrite(led, LOW); // apaga el LED funcionando al igual que una sirena
+    delay(50);
+    digitalWrite(zumbador, HIGH);  // Se activa el buzzer indicando la señal de fuego 
+    delay(50);
+    // Desactiva el buzzer
+    digitalWrite(zumbador, LOW);
+    delay(50);
+  }
+  else
+  {
+    digitalWrite(led, LOW); // apaga el LED
+    digitalWrite(zumbador, LOW); // apaga el zumbador
+  }
+
+  // lectura entrada análoga
+  analogVal = analogRead(analogPin);
+  Serial.println(analogVal); // imprime valor analogico, ver en el monitor 
+
+  delay(100);
+}
+
