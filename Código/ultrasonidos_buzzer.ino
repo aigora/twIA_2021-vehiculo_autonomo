@@ -4,14 +4,13 @@
 #define BUZZER 9
  
 void setup() {
-  // Iniciamos el monitor serie
-  Serial.begin(9600);
-  
+
   pinMode(ECHO, INPUT);
   pinMode(TRIGGER, OUTPUT);
   pinMode(BUZZER, OUTPUT);
 }
  
+
 void loop() {
   // Preparamos el sensor de ultrasonidos
   iniciarTrig();
@@ -26,6 +25,7 @@ void loop() {
   } 
 }
 
+
 void pitido(float distancia)
 {
   //La frecuencia tiene una relación lineal con la distancia
@@ -36,8 +36,8 @@ void pitido(float distancia)
 //Estas relaciones lineales las hemos obtenido para que se ajusten a la capacidad de los sensores y a nuestras preferencias
  
 
-// Funcion que inicia la secuencia del Trigger 
-void iniciarTrig()
+ 
+void iniciarTrig() // Funcion que inicia la secuencia del Trigger
 {
   // Ponemos el Trigger en estado bajo y esperamos 2 ms
   digitalWrite(TRIGGER, LOW);
@@ -47,7 +47,7 @@ void iniciarTrig()
   digitalWrite(TRIGGER, HIGH);
   delayMicroseconds(10);
  
-  // Terminamos poniendo el pin Trigger en estado bajo
+  // Terminamos poniendo el pin Trigger en estado bajo 
   digitalWrite(TRIGGER, LOW);
 }
 
@@ -56,13 +56,9 @@ float ObtenerDist() // Funcion que devuelve una variable tipo float que contiene
 {
   unsigned long tiempo = pulseIn(ECHO, HIGH);//Mide el tiempo que tarda en recibir la onda el transductor ECHO
  
-  // Obtenemos la distancia en cm
+ // Obtenemos la distancia en cm
   float distancia = tiempo * 0.01715;  //La distancia es igual al tiempo por la velocidad del sonido en cm por microsegundo
-  Serial.print(distancia); //dado que "pulse in" mide el tiempo en microsegundos
-  Serial.print("cm");
-  Serial.println();
-  delay(500);
+ //dado que "pulse in" mide el tiempo en microsegundos
  
   return distancia;
 }
- 
