@@ -48,7 +48,7 @@ int main() {
 	}
 }
 
-void Send_to_hw(Serial* Arduino, char* estado)
+void Send_to_hw(Serial* Arduino, char* estado)     		// Cuerpo de la función
 {
 	Arduino->WriteData(estado, strlen(estado));
 }
