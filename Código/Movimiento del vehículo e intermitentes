@@ -57,7 +57,7 @@ void loop()
   int derA = 9; 
   int derB = 10; 
   int vel = 255;             // Hace referencia a la velocidad que tendrán los motores (0-255)
-  char estado = 'g';         // Estado incial del vehículo (en reposo)
+  char estado = 'c';         // Estado incial del vehículo (en reposo)
 
   int echo = 2;            // Se reservan los pines 2 y 3 para el sensor ultrasonido
   int trigger = 3;         
