@@ -4,7 +4,7 @@
 #include "SerialClass.h"
 
 
-void Send_to_hw(Serial* Arduino, char* estado);		 // Prototipo de la función que permitirá enviar datos a Arduino
+void Send_to_hw(Serial* Arduino, char* estado);		 // Prototipos de las funciones
 
 
 int main() {
