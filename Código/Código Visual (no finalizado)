@@ -100,7 +100,7 @@ int main() {
 				guardar_distancia_en_txt;                                                                         // Se escribe la distancia en "Fichero_distancia" (un archivo .txt)
 
 			}
-			if (fclose(p_archivo_distancia) != 0)                                                                 // Al finalizar la conexion con el arduino cerramos el fichero y avisamos de si ha habido un error al cerrarlo
+			if (fclose(p_archivo_distancia) != 0) {                                                                // Al finalizar la conexion con el arduino cerramos el fichero y avisamos de si ha habido un error al cerrarlo
 				printf("Problemas al cerrar el fichero\n");
 	}
 
@@ -115,33 +115,6 @@ int main() {
 
 
 
-	while (Arduino->IsConnected()) {                                                                          // Bucle principal del programa
-
-		printf("Conexion correcta\n");
-
-		j = 0;
-		cdistancia[0] = '\0';
-
-
-		while (j < 10)
-		{
-
-			BufferEntrada[0] = '\0';
-			bytesRecibidos = Arduino->ReadData(BufferEntrada, sizeof(char) * 199);
-			if (bytesRecibidos != -1)
-			{
-				BufferEntrada[bytesRecibidos] = '\0';
-				strcat_s(cdistancia, BufferEntrada);
-			}
-			j++;
-
-			guardar_distancia_en_txt;                                                                         // Se escribe la distancia en "Fichero_distancia" (un archivo .txt)
-
-		}
-		if (fclose(p_archivo_distancia) != 0)                                                                 // Al finalizar la conexion con el arduino cerramos el fichero y avisamos de si ha habido un error al cerrarlo
-			printf("Problemas al cerrar el fichero\n");
-
-	}
 
 }
 
