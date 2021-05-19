@@ -114,9 +114,11 @@ int main() {
 	}
 
 
-
-
 }
+
+
+
+
 
 void Send_to_hw(Serial* Arduino, char* estado)
 {
