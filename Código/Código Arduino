@@ -263,7 +263,7 @@ void loop()
   iniciarTrig();   // Preparamos el sensor de ultrasonidos
   char cdistancia[10];
   
-  //float distancia = ObtenerDist();                                 // Obtenemos la distancia
+ int dist = ObtenerDist();                                 // Obtenemos la distancia
  
   if (ObtenerDist() <= 60)
   {
@@ -523,7 +523,7 @@ int ObtenerDist()                                                  // Funcion qu
   unsigned long tiempo = pulseIn(ECHO, HIGH);                      // Mide el tiempo que tarda en recibir la onda el transductor ECHO
   // Obtenemos la distancia en cm
   
-  int distancia = tiempo * 0.01715;                                // La distancia es igual al tiempo por la velocidad del sonido en cm por microsegundo
+  int dist = tiempo * 0.01715;                                // La distancia es igual al tiempo por la velocidad del sonido en cm por microsegundo
  
-  return distancia;
+  return dist;
 }
