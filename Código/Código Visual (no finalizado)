@@ -4,15 +4,46 @@
 #include "SerialClass.h"
 
 
-void Send_to_hw(Serial* Arduino, char* estado);		 // Prototipos de las funciones
+void Send_to_hw(Serial* Arduino, char* estado);		 // Prototipo de la función que permitirá enviar datos a Arduino
+void guardar_distancia_en_txt(FILE*, char);
+
+
+struct permisoconducir {
+
+	char nombre[30];
+	char apellido[30];
+	int edad;									// Si el usuario es menor de 18 años no podrá conducir el vehículo
+
+};
 
 
 int main() {
-
+	
 	Serial* Arduino;
 
 	char puerto[] = "COM3";						 // Puerto serie al que está conectado Arduino en este caso
 	char estado;
+
+	char BufferSalida[200];
+	char BufferEntrada[200];
+	char cdistancia[200];
+	int bytesRecibidos;
+	int j;
+
+
+	/*struct permisoconducir usuario;
+
+	printf("Introduzca su nombre: ");
+	scanf_s("%s",usuario.nombre);
+	printf("Introduzca su apellido: ");
+	scanf_s("%s",usuario.apellido);
+	printf("Introduzca su edad: ");
+	scanf_s("%d",&usuario.edad);
+	
+
+	printf("\n--------------------------------------------------------------------- ")
+	printf("\nPermiso de conducir"); */
+
 
 	Arduino = new Serial((char*)puerto);		     // Se inicia la conexión con Arduino
 
@@ -45,10 +76,81 @@ int main() {
 			printf("El vehiculo se ha detenido");
 			break;
 	
+
+
+			Sleep(3000);
+			system("cls");
+
+			j = 0;
+			cdistancia[0] = '\0';
+
+
+			while (j < 10)
+			{
+
+				BufferEntrada[0] = '\0';
+				bytesRecibidos = Arduino->ReadData(BufferEntrada, sizeof(char) * 199);
+				if (bytesRecibidos != -1)
+				{
+					BufferEntrada[bytesRecibidos] = '\0';
+					strcat_s(cdistancia, BufferEntrada);
+				}
+				j++;
+
+				guardar_distancia_en_txt;                                                                         // Se escribe la distancia en "Fichero_distancia" (un archivo .txt)
+
+			}
+			if (fclose(p_archivo_distancia) != 0)                                                                 // Al finalizar la conexion con el arduino cerramos el fichero y avisamos de si ha habido un error al cerrarlo
+				printf("Problemas al cerrar el fichero\n");
 	}
+
+
+
+	FILE* p_archivo_distancia;
+	p_archivo_distancia = fopen("Fichero_distancia.txt", "a");                                                // Abrimos el fichero o avisamos si ha habido un error al abrir el archivo
+	if (p_archivo_distancia == NULL) {
+		printf("No se puede abrir el fichero.\n");
+		exit(1);
+	}
+
+
+
+	while (Arduino->IsConnected()) {                                                                          // Bucle principal del programa
+
+		printf("Conexion correcta\n");
+
+		j = 0;
+		cdistancia[0] = '\0';
+
+
+		while (j < 10)
+		{
+
+			BufferEntrada[0] = '\0';
+			bytesRecibidos = Arduino->ReadData(BufferEntrada, sizeof(char) * 199);
+			if (bytesRecibidos != -1)
+			{
+				BufferEntrada[bytesRecibidos] = '\0';
+				strcat_s(cdistancia, BufferEntrada);
+			}
+			j++;
+
+			guardar_distancia_en_txt;                                                                         // Se escribe la distancia en "Fichero_distancia" (un archivo .txt)
+
+		}
+		if (fclose(p_archivo_distancia) != 0)                                                                 // Al finalizar la conexion con el arduino cerramos el fichero y avisamos de si ha habido un error al cerrarlo
+			printf("Problemas al cerrar el fichero\n");
+
+	}
+
 }
 
-void Send_to_hw(Serial* Arduino, char* estado)     		// Cuerpo de la función
+void Send_to_hw(Serial* Arduino, char* estado)
 {
 	Arduino->WriteData(estado, strlen(estado));
+}
+
+void guardar_distancia_en_txt(FILE* p_archivo_distancia, char cdistancia) {                              // Funcion que se encarga de guardar la distancia en un archivo                                                  //Cuerpo de la funcion
+
+	fprintf_s(p_archivo_distancia, "%c\n", cdistancia);
 }
