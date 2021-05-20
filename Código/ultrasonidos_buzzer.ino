@@ -22,11 +22,11 @@ void loop() {
   iniciarTrig();   // Preparamos el sensor de ultrasonidos
   char cdistancia[10];
   
-  float distancia = ObtenerDist();                                 // Obtenemos la distancia
+  int dist = ObtenerDist();                                 // Obtenemos la distancia
  
-  if (distancia <= 60)
+  if (dist <= 60)
   {
-    sprintf(cdistancia, "%d", distancia);                          // Paso la distancia a una cadena para enviarla al visual
+    sprintf(cdistancia, "%d", dist);                          // Paso la distancia a una cadena para enviarla al visual
   for (int i=0;i<10;i++)                          // Recorrido de la cadena
  {
  Serial.print(cdistancia[i]);                               //Envío carácter a carácter
@@ -34,8 +34,8 @@ void loop() {
  }
  Serial.println();                               
   
-  float frecuencia = -7.5 * distancia + 900;                       // La frecuencia tiene una relación lineal con la distancia
-  float duracion = 5 * distancia + 200;                            // La duración también tiene una relación lineal con la distancia
+  float frecuencia = -7.5 * dist + 900;                       // La frecuencia tiene una relación lineal con la distancia
+  float duracion = 5 * dist + 200;                            // La duración también tiene una relación lineal con la distancia
   tone(BUZZER,frecuencia , duracion); 
  }
 }
