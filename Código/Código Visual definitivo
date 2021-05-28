@@ -1,0 +1,606 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <malloc.h>
+#include <Windows.h>
+#include <process.h>
+#include "SerialClass.h"
+
+#define JUGADORES 25
+
+
+//estructura datos conductores
+typedef struct
+{
+	char nombre[51];
+	char apellido[51];
+	int edad;
+}jugador;
+
+
+//Funciones resgistro de jugadores
+jugador PedirDatos();
+void MostrarUsuario(jugador c);
+int LeerUsuario(FILE* f, jugador* c);
+int GuardarUsuario(FILE* f, jugador c);
+void EliminarUsuario(jugador ListaUsuarios[], int* num, int i);
+void MostrarListaParticipantes(jugador ListaUsuarios[], int num);
+void NuevoUsuario(jugador ListaUsuarios[], int* num, jugador c);
+
+//funciones de E/S basica y menus del programa
+int Menu_Principal();//menu principal de opciones
+int Menu_Movimientos();
+int Menu_Direccion();
+int Menu_Escalera_manguera();
+int Modos_Giro_Escalera();
+void Send_to_hw(Serial* Arduino, char* estado);
+void guardar_distancia_en_txt(FILE* p_archivo_distancia, char cdistancia);
+
+
+ 
+int main() {
+	
+	Serial* Arduino;
+
+	char puerto[] = "COM4";						 // Puerto serie al que está conectado Arduino en este caso
+	char estado;
+
+    jugador equipo[JUGADORES];
+    jugador c;
+    jugador* pc;
+    int m;
+
+
+    int jugadores = 0;
+    //Declaración de las opciones de los switch´s del proyecto 
+    int opcion = 0, opcion2 = 0, opcion3 = 0, opcion4 = 0, opcion5 = 0, opcion6 = 0, opcion7 = 0;
+    int n;
+	
+
+	char BufferSalida[200];
+	char BufferEntrada[200];
+	char cdistancia[200];
+	int bytesRecibidos;
+	int j;
+
+
+    pc = (jugador*)malloc(m * sizeof(jugador));
+    if (pc == NULL) {
+        printf("Error. Memoria insuficiente\n");
+    }
+
+
+	Arduino = new Serial((char*)puerto);		     // Se inicia la conexión con Arduino
+
+
+
+	// Bucle principal del programa
+
+    while (Arduino->IsConnected()) {
+
+        printf("Conexión correcta\n");
+        Sleep(1000);
+        system("cls");
+
+        do {
+
+            opcion = Menu_Principal();
+            switch (opcion) {
+
+            case 1: c = PedirDatos();
+                NuevoUsuario(equipo, &jugadores, c);
+                break;
+
+            case 2: MostrarListaParticipantes(equipo, jugadores);
+                break;
+
+            case 3:
+                MostrarListaParticipantes(equipo, jugadores);
+                printf("Conductor a eliminar: ");
+                scanf_s("%d", &n);
+                EliminarUsuario(equipo, &jugadores, n);
+                MostrarListaParticipantes(equipo, jugadores);
+                break;
+
+            case 4: printf("Comenzar la partida\n");
+                break;
+            }
+            //algunos detalles para una salida mas limpia
+            system("pause");
+            system("cls");//esto borra la consola
+
+        } while (opcion != 4);
+
+        do {
+
+            opcion2 = Menu_Movimientos();
+
+            switch (opcion2) {
+
+            case 1: do {     // Dirección del vehículo
+
+                opcion3 = Menu_Direccion();
+
+                switch (opcion3) {
+
+                case 1:
+
+                    printf("Para ejecutar esta instruccion, debe pulsar 'a'\n");
+                    printf("Control de la direccion del vehiculo: \n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+
+
+
+                    break;
+
+                case 2:
+                    printf("Para ejecutar esta instruccion, debe pulsar 'b'\n");
+                    printf("Control de la direccion del vehiculo: \n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+
+
+
+                    break;
+
+                case 3:
+                    printf("Para ejecutar esta instruccion, debe pulsar 'e'\n");
+                    printf("Control de la direccion del vehiculo: \n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+
+
+
+                    break;
+
+                case 4:
+                    printf("Para ejecutar esta instruccion, debe pulsar 'd'\n");
+                    printf("Control de la direccion del vehiculo: \n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+
+
+
+                    break;
+                case 5:
+                    printf("Para ejecutar esta instruccion, debe pulsar 'f'\n");
+                    printf("Control de la direccion del vehiculo: \n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+
+
+
+                    break;
+                case 6:
+
+
+                    break;
+                }
+                system("pause");
+                system("cls");
+
+            } while (opcion3 != 6);
+            break;
+
+            case 2: do {          // Sistema escalera manguera
+
+                opcion4 = Menu_Escalera_manguera();
+
+                switch (opcion4) {
+
+                case 1: do {
+
+                    opcion5 = Modos_Giro_Escalera();
+
+                    switch (opcion5) {
+
+                    case 1:
+                        printf("Para ejecutar esta instruccion, debe pulsar ''\n");
+                        printf("Control del giro de la escalera: \n");
+                        scanf_s(" %c", &estado);
+                        Send_to_hw();
+
+                        break;
+
+                    case 2:
+                        printf("Para ejecutar esta instruccion, debe pulsar ''\n");
+                        printf("Control del giro de la escalera: \n");
+                        scanf_s(" %c", &estado);
+                        Send_to_hw();
+
+                        break;
+
+                    case 3:
+
+                        break;
+                    }
+
+                    system("cls");
+
+                } while (opcion5 != 3);
+                break;
+
+                case 2:      //encender   manguera
+                    printf("Para ejecutar esta instruccion, debe pulsar 'k'\n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+                    printf("Manguera encendida \n");
+
+                    break;
+                case 3:     // apagar  manguera
+                    printf("Para ejecutar esta instruccion, debe pulsar 'l'\n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+                    printf("Manguera apagada \n");
+
+                    break;
+                case 4:                 //deposito del agua                                            informacion del sensor desde la placa
+                    printf("Para ejecutar esta instruccion, debe pulsar ''\n");
+                    scanf_s(" %c", &estado);
+                    Send_to_hw();
+                    printf("Nivel actual del depósito: \n");
+                    break;
+                case 5:
+
+                    break;
+                }
+
+                system("cls");
+
+            } while (opcion4 != 5);
+            break;
+
+            case 3:
+
+                printf("Para ejecutar esta instruccion, debe pulsar 'g'\n");
+                scanf_s(" %c", &estado);
+                Send_to_hw();
+                printf("Sirena encendida: \n");
+                break;
+
+            case 4: printf("¡Hasta la proxima!\n");
+                break;
+            }
+            //algunos detalles para una salida mas limpia
+
+            system("cls");//esto borra la consola
+
+        } while (opcion2 != 4);
+    }
+  
+
+    //cuando sale el programa guarda automaticamente el fichero
+
+    Sleep(3000);
+    system("cls");
+
+    j = 0;
+    cdistancia[0] = '\0';
+
+
+    while (j < 10)
+    {
+
+        BufferEntrada[0] = '\0';
+        bytesRecibidos = Arduino->ReadData(BufferEntrada, sizeof(char) * 199);
+        if (bytesRecibidos != -1)
+        {
+            BufferEntrada[bytesRecibidos] = '\0';
+            strcat_s(cdistancia, BufferEntrada);
+        }
+        j++;
+
+        guardar_distancia_en_txt;                                                                         // Se escribe la distancia en "Fichero_distancia" (un archivo .txt)
+
+    }
+    if (fclose(p_archivo_distancia) != 0)                                                                 // Al finalizar la conexion con el arduino cerramos el fichero y avisamos de si ha habido un error al cerrarlo
+        printf("Problemas al cerrar el fichero\n");
+
+     
+
+
+ 
+FILE* p_archivo_distancia;
+p_archivo_distancia = fopen("Fichero_distancia.txt", "a");                                                // Abrimos el fichero o avisamos si ha habido un error al abrir el archivo
+if (p_archivo_distancia == NULL) {
+    printf("No se puede abrir el fichero.\n");
+    exit(1);
+}
+
+
+
+while (Arduino->IsConnected()) {                                                                          // Bucle principal del program
+
+    j = 0;
+    cdistancia[0] = '\0';
+
+
+    while (j < 10)
+    {
+
+        BufferEntrada[0] = '\0';
+        bytesRecibidos = Arduino->ReadData(BufferEntrada, sizeof(char) * 199);
+        if (bytesRecibidos != -1)
+        {
+            BufferEntrada[bytesRecibidos] = '\0';
+            strcat_s(cdistancia, BufferEntrada);
+        }
+        j++;
+
+        guardar_distancia_en_txt;                                                                         // Se escribe la distancia en "Fichero_distancia" (un archivo .txt)
+
+    }
+    if (fclose(p_archivo_distancia) != 0)                                                                 // Al finalizar la conexion con el arduino cerramos el fichero y avisamos de si ha habido un error al cerrarlo
+        printf("Problemas al cerrar el fichero\n");
+}
+
+    free(pc);
+
+}//fin main
+
+ 
+
+
+
+//-----------------------------------------FUNCIONES-----------------------------------------
+
+
+jugador PedirDatos() {
+
+    jugador c;
+
+    fflush(stdin);
+    printf("Nombre: ");
+    gets_s(c.nombre);
+    printf("Apellido: ");
+    gets_s(c.apellido);
+    printf("Edad: ");
+    scanf_s("%d", &c.edad);
+
+    return c;
+
+}
+
+
+//lista datos jugadores
+void MostrarUsuario(jugador c) {
+
+    printf("%-20s %-20s %-10d\n", c.nombre, c.apellido, c.edad);
+}
+
+
+//funciones de E/S por fichero de texto
+int LeerUsuario(FILE* f, jugador* c) {
+
+
+       if (f == NULL) //si el fichero no esta abierto
+           return 0; //devuelvo “falso”
+
+       if (3 == fscanf_s(c,"%s %s %d",c->nombre,c->apellido,&c->edad))         
+    return 1;//se han leido bien los 3 campos, devuelve “cierto”
+
+// return 0;
+}
+
+
+int GuardarUsuario(FILE* f, jugador c) {
+
+    if (f == NULL)
+        return 0;
+
+    if (3 == fprintf(f, "%s %s %d\n", c.nombre, c.apellido, c.edad))
+        return 1;//se han guardado bien los 3 campos
+
+    return 0;
+}
+
+
+
+void EliminarUsuario(jugador equipo[], int* num, int n) {
+
+    int i;
+    int numero = *num;
+
+    if (n < 0 || n >= numero) //el numero de contacto debe existir
+        return;            //si no, no hacemos nada
+
+    for (i = n;i < numero - 1;i++) {//movemos todos los contactos una posicion
+
+        equipo[i] = equipo[i + 1];
+    }
+
+    *num = numero - 1;  
+}
+
+
+
+void MostrarListaParticipantes(jugador equipo[], int num) {
+
+    int i;
+
+    printf("\n><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("#: %-20s %-20s %-10s\n", "Nombre", "Apellido", "Edad");
+    printf("------------------------------------------------------\n");
+
+    for (i = 0;i < num;i++) {
+
+        printf("%d: ", i); 
+        MostrarUsuario(equipo[i]); 
+    }
+
+    printf("><><><><><><><><><><><><><><><><><><><><><><><><><><><\n\n");
+}
+
+
+//añade un nuevo jugador
+void NuevoUsuario(jugador equipo[], int* num, jugador c) {
+
+    int n = *num;
+    if (n < JUGADORES) {
+
+        equipo[n] = c; 
+        n++;  
+    }
+
+    *num = n; //actualizamos el parametro pasado por referencia 
+}
+
+
+
+
+//esta funcion se encarga de imprimir las opciones
+//y pedir al usuario que elija una de ellas
+
+int Menu_Principal() {
+
+    int opcion = -1;
+    printf("\n><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("....................Menu Principal....................\n");
+    printf("><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("1-Anadir conductor\n");
+    printf("2-Mostrar conductores de este vehiculo\n");
+    printf("3-Eliminar conductor\n");
+    printf("4-Comenzar la partida\n\n");
+
+    do {
+
+        printf("Elija una opcion: ");
+        fflush(stdin);
+        scanf_s("%d", &opcion);
+    }
+
+    while (opcion < 0 || opcion>6);
+    return opcion;
+}
+
+int Menu_Movimientos() {
+
+    int opcion = -1;
+
+    printf("\n><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("......................Controles.......................\n");
+    printf("><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("1-Mover vehiculo\n");
+    printf("2-Accionar sistema escalera-manguera\n");
+    printf("3-Encender sirena\n");
+    printf("4-Finalizar programa\n\n");
+
+    do {
+
+        printf("Elija una opcion: ");
+        fflush(stdin);
+        scanf_s("%d", &opcion);
+    }
+
+    while (opcion < 0 || opcion>6);
+    return opcion;
+}
+
+
+int Menu_Direccion() {
+
+    int opcion = -1;
+
+    printf("\n><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("......................Movimientos.....................\nº");
+    printf("><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("1-Hacia adelante\n");
+    printf("2-Hacia la izquierda\n");
+    printf("3-Hacia atras\n");
+    printf("4-Hacia la derecha\n");
+    printf("5-Automatico\n");
+    printf("6-Parar y salir al menu de movimientos\n\n");
+
+    do {
+
+        printf("Elija una opcion: ");
+        fflush(stdin);
+        scanf_s("%d", &opcion);
+    }
+
+    while (opcion < 0 || opcion>8);
+    return opcion;
+}
+
+
+int Menu_Escalera_manguera() {
+
+    int opcion = -1;
+
+    printf("\n><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("............Movimientos Escalera-Manguera.............\n");
+    printf("><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("1-Girar escalera\n");
+    printf("2-Encender manguera\n");
+    printf("3-Apagar manguera\n");
+    printf("4-Nivel del deposito del agua\n");
+    printf("5-Salir al menú de movimientos\n\n");
+
+    do {
+
+        printf("Elija una opcion: ");
+        fflush(stdin);
+        scanf_s("%d", &opcion);
+    }
+
+    while (opcion < 0 || opcion>8);
+    return opcion;
+}
+
+
+int Modos_Giro_Escalera() {
+
+    int opcion = -1;
+
+    printf("\n><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("....................Modos de Giro.....................\n");
+    printf("><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("1-Izquierda\n");
+    printf("2-Derecha\n");
+    printf("3-Salir al menu de movimientos\n\n");
+
+    do {
+
+        printf("Elija una opcion: ");
+        fflush(stdin);
+        scanf_s("%d", &opcion);
+    }
+
+    while (opcion < 0 || opcion>8);
+    return opcion;
+}
+
+
+int Modos_Giro_Escalera() {
+
+    int opcion = -1;
+
+    printf("\n><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("....................Modos de Giro.....................\n");
+    printf("><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+    printf("1-Izquierda\n");
+    printf("2-Derecha\n");
+    printf("3-Salir al menu de movimientos\n\n");
+
+    do {
+
+        printf("Elija una opcion: ");
+        fflush(stdin);
+        scanf_s("%d", &opcion);
+    }
+
+    while (opcion < 0 || opcion>8);
+    return opcion;
+}
+
+
+void Send_to_hw(Serial* Arduino, char* estado)
+{
+	Arduino->WriteData(estado, strlen(estado));
+}
+
+void guardar_distancia_en_txt(FILE* p_archivo_distancia, char cdistancia) {                              // Funcion que se encarga de guardar la distancia en un archivo                                                  //Cuerpo de la funcion
+
+	fprintf_s(p_archivo_distancia, "%c\n", cdistancia);
+}
